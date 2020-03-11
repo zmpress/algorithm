@@ -1,5 +1,8 @@
 package zmpress.algorithm.sort;
 
+import java.util.Queue;
+import java.util.Stack;
+
 /**
  * @author zc
  * @version 1.0
@@ -16,7 +19,7 @@ public class QuickSort {
 
     public static void main(String[] args) {
         int[] array = SortUtil.randomArray(NUM);
-        int[] sort = quickSort(array);
+        int[] sort = quickSort2(array);
         System.out.println("排序次数:" + count);
         for (int i : sort) {
             System.out.print(i + " ");
@@ -25,19 +28,70 @@ public class QuickSort {
 
 
     /**
-     * 迭代
+     * 非递归
      * 从小到大
+     * 用栈模拟递归调用的过程
      *
      * @param array
      * @return
      */
     public static int[] quickSort2(int[] array) {
 
-        for (int i = 0; i < array.length; i++) {
+        Stack<Integer> stack = new Stack<Integer>();
+        int left = 0;
+        int right = array.length - 1;
+        stack.push(left);
+        stack.push(right);
+
+        while (!stack.empty()) {
+            right = stack.pop();
+            left = stack.pop();
+
+            // 进行一次快速排序的交换
+            int index = partSort(array, left, right);
+            if (index - 1 > left) {
+                stack.push(left);
+                stack.push(index - 1);
+            }
+
+            if (index + 1 < right) {
+                stack.push(index + 1);
+                stack.push(right);
+            }
+        }
+        return array;
+    }
+
+
+    private static int partSort(int[] array, int left, int right) {
+        if (left > right) {
+            return -1;
+        }
+        count++;
+        // 基准数
+        int base = array[left];
+        int i = left;
+        int j = right;
+        int temp;
+        while (i != j) {
+            while (array[j] >= base && i < j) {
+                count++;
+                j--;
+            }
+            while (array[i] <= base && i < j) {
+                count++;
+                i++;
+            }
+            temp = array[j];
+            array[j] = array[i];
+            array[i] = temp;
 
         }
+        // i == j
+        array[left] = array[i];
+        array[i] = base;
 
-        return array;
+        return i;
     }
 
     /**
@@ -83,7 +137,7 @@ public class QuickSort {
 
         }
 
-        // i = j
+        // i == j
         array[left] = array[i];
         array[i] = base;
 
