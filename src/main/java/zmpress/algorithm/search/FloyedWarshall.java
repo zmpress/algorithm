@@ -8,6 +8,7 @@ import java.util.Arrays;
  * @date 2020/3/18 9:20 下午
  * @desc Floyed-Warshall算法
  * 时间复杂度O(N^3)
+ * 可以处理负权边
  * 无法解决负权回路
  */
 public class FloyedWarshall {
